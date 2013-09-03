@@ -1,0 +1,31 @@
+body {
+ 	background: #000;
+	font-family: courier;
+}
+
+.cssConsole {background: none;}
+
+#input {
+	width: 910px;
+	display:inline-block;
+	position:relative;
+	float:left;
+}
+
+.label {
+	width: 30px;
+	position: relative;
+	left: 15px;
+	top:5px;
+	color: #fefefe;
+	float:left;
+}
+
+.line {
+	color: #33d011;
+	margin-left: 15px;
+	margin-bottom:2px;
+}
+
+.line.red {color: red;}
+.line.yellow {color: yellow;}

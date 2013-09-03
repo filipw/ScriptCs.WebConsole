@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="css/cssConsole.console.css" type="text/css" rel="stylesheet">
+<link href="css/main.css" type="text/css" rel="stylesheet">
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="js/jquery.signalR-2.0.0-rc1.js"></script>
+<script src="http://localhost:8945/signalr/hubs"></script>
+<script src="js/cssConsole.min.js"></script>
+<!-- based on the https://github.com/michalkow/cssConsole project! -->
+</head>
+<body>
+		<div class="console">
+			<div class="line">Welcome to scriptcs web console!</div>
+		</div>
+		<div>
+			<div class="label">></div>
+			<div id="input"></div>
+		</div>
+<script>
+
+var ConsoleApp = ConsoleApp || {};
+
+ConsoleApp.Focus = function() {
+	$('#input').find('input').focus();
+};
+
+ConsoleApp.AddLine = function(input) {
+	if (input != "> ") {
+		$('.console').append('<div class="line '+ConsoleApp.Color+'">'+input+'</div>');
+		window.scrollTo(0,document.body.scrollHeight);
+	}
+};
+
+ConsoleApp.Color = "none";
+
+$(function() {
+
+	$.connection.hub.url = "http://localhost:8945/signalr";
+	var cons = $.connection.console;
+
+	cons.client.Write = function (message) {
+		ConsoleApp.AddLine(message);
+	};
+
+	cons.client.WriteLine = function (message) {
+		ConsoleApp.AddLine(message);
+	};
+
+	cons.client.ResetColor = function(message) {
+		ConsoleApp.Color = "none";
+	};
+
+	cons.client.ConsoleColor = function(message) {
+		switch (message) {
+			case 12:
+				ConsoleApp.Color = "red";
+				break;
+			case 14:
+				ConsoleApp.Color = "yellow";
+				break;
+		}
+
+		console.log(ConsoleApp.Color);
+	};
+
+	$.connection.hub.start({ jsonp: true }).done(function () {
+		$('#input').cssConsole({
+			inputName:'console',
+			charLimit: 60,
+			onEnter: function(){
+				ConsoleApp.Color = "none";
+
+				var input = $('#input').find('input').val();
+				cons.server.userInput(input);
+				ConsoleApp.AddLine("> "+ input);
+
+				$('#input').cssConsole('reset');	
+				ConsoleApp.Focus();
+			}
+		});
+
+		ConsoleApp.Focus();
+	});	
+
+});
+</script>
+  
+</body>
+</html>
