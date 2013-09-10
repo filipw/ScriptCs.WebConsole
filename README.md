@@ -3,12 +3,14 @@ ScriptCs.WebConsole
 
 To get started:
 
-1) install the nupkg from this repository as global module `scriptcs -install scriptcs.webconsole -g` - (you will have to add a private feed to your nuget config)
+all you need is this build of scriptcs - https://github.com/filipw/scriptcs/tree/iconsole
 
-2) grab this build of scriptcs - https://github.com/filipw/scriptcs/tree/iconsole and build it
+1. get it, build
 
-3) run `scriptcs.exe -modules webconsole -repl` on that build. Make sure you run with elevation. This will start the self hosted SignalR server.
+2. run `scriptcs -install scriptcs.webconsole -pre -g`. This will install web console as scriptcs global module
 
-4) navigate to `index.html` from the client folder of this repo
+3. start: `scriptcs.exe -modules webconsole -repl` (it should display info that signalr server is running)
 
-5) voila!
+4. go to [http://scriptcs-webconsole.azurewebsites.net/](http://scriptcs-webconsole.azurewebsites.net/) and use the web console!
+The website is hosted on azure but it will try to connect to your local `scriptcs.exe` (localhost:8945)
+If the local `scriptcs.exe` is not running you will simply see a JS error.
